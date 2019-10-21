@@ -33,7 +33,7 @@ import (
  ***************/
 
 func main() {
-	var configFile, groundstation string
+	var configFile string
 
 	flag.StringVar(&configFile, "c", "config.yaml", "config file")
 	flag.Parse()

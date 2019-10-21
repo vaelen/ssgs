@@ -1,4 +1,4 @@
-# Groundstation - Add your ground station to the StellarStation platform
+# SSGS - Add your ground station to the StellarStation platform
 
 This application provides a simple way to add your ground station to the
 StellarStation network without the need to implement all of the APIs yourself.
@@ -10,13 +10,13 @@ It includes the following components:
 To build:
 
 ``` shell
-$ go build cmd/groundstation.go
+$ go build cmd/ssgs.go
 ```
 
 Usage:
 
 ``` shell
-$ groundstation [-c config.yaml]
+$ ssgs [-c config.yaml]
 ```
 
 Example configuration:
