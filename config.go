@@ -111,9 +111,9 @@ func LoadConfig(configFile string) (config *Config, err error) {
 	ext := strings.ToLower(path.Ext(configFile))
 
 	switch ext {
-	case "json":
+	case ".json":
 		err = json.Unmarshal(data, config)
-	case "yaml":
+	case ".yaml":
 		err = yaml.Unmarshal(data, config)
 	default:
 		log.Fatalf("Unsupported config file type: %s\n", ext)
