@@ -35,7 +35,7 @@ import (
 func main() {
 	var configFile, groundstation string
 
-	flag.StringVar(&configFile, "c", "config.json", "config file")
+	flag.StringVar(&configFile, "c", "config.yaml", "config file")
 	flag.Parse()
 
 	config, err := ssgs.LoadConfig(configFile)
