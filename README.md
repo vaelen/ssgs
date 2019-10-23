@@ -10,7 +10,8 @@ It includes the following components:
 To build:
 
 ``` shell
-$ go build cmd/ssgs.go
+$ go build cmd/ssgs/ssgs.go
+$ go build cmd/sender/sender.go
 ```
 
 Usage:
@@ -22,47 +23,47 @@ $ ssgs [-c config.yaml]
 Example configuration:
 
 ``` yaml
-GroundStation:
-  Name: "Test"
-  ID: "1"
-  Address: "test:443"
-  Key: "api-key.json"
-  PlanUpdateInterval: "5m"
-Data:
-  - Name: "AX.25"
-    Address: ":5555"
-    Framing: "AX.25"
-  - Name: "Bitstream"
-    Address: ":5556"
-    Framing: "BITSTREAM"
-Schedulers:
-  - Name: "Everything"
-    Address: ":5554"
+station:
+  name: "Test"
+  id: "1"
+  address: "test:443"
+  key: "api-key.json"
+  plan-update-interval: "5m"
+ports:
+  - name: "AX.25"
+    address: ":5555"
+    framing: "AX.25"
+  - name: "Bitstream"
+    address: ":5556"
+    framing: "BITSTREAM"
+schedulers:
+  - name: "Everything"
+    address: ":5554"
 ```
 
-Notes on the GroundStation configuration:
-- The `Name` value is used for logging purposes only.
-- The `ID` value should be either the ground station ID as provided by StellarStation.
-- The `Address` field should be the hostname (or IP address) and port number of the StarPass device.
-- The `Key` field should be the file name of your API key.
-- The `PlanUpdateInterval` fields sets the interval for updating plan data.
+Notes on the station configuration:
+- The `name` value is used for logging purposes only.
+- The `id` value should be either the ground station ID as provided by StellarStation.
+- The `address` field should be the hostname (or IP address) and port number of the StarPass device.
+- The `key` field should be the file name of your API key.
+- The `plan-update-interval` field sets the interval for updating plan data.
 
-Notes on the Data configuration:
+Notes on the port configuration:
 - Each entry represents a data port.
 - Data sent to the data port will be forwarded on to StellarStation.
 - Commands received from StellarStation will be sent to connected clients.
 - The format for the either sending or receiving data is:
-  - 4 bytes : Data length (LSB)
+  - 4 bytes : Data length (LSB uint32)
   - N bytes : Data
-- The `Name` value is used for logging purposes only.
-- The `Address` field tells the server which address and port to listen to.
-- The `Framing` field tells the server which data framing to use.
+- The `name` value is used for logging purposes only.
+- The `address` field tells the server which address and port to listen to.
+- The `framing` field tells the server which data framing to use.
   - Valid values are: `AX.25`, `BITSTREAM` (default), `WATERFALL`, and `IQ`
-- The `Satellite` field can be set to limit the data sent and received to a particular satellite.
+- The `satellite` field can be set to limit the data sent and received to a particular satellite.
 
-Notes on the Schedulers configuration:
+Notes on the schedulers configuration:
 - Each entry represents a scheduling port.
 - New plans will be send to connected clients.
 - NOTE: This feature is not yet implemented.
-- The `Name` value is used for logging purposes only.
-- The `Address` field tells the server which address and port to listen to.
+- The `name` value is used for logging purposes only.
+- The `address` field tells the server which address and port to listen to.
