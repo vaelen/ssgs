@@ -42,9 +42,13 @@ type DataServerConfig struct {
 	// (required)
 	Address string
 	// Framing should match the framing type of the data.
-	// Valid values are: BITSTREAM, AX.25, WATERFALL, IQ
-	// (required)
+	// Valid values are: Bitstream, AX.25, Waterfall, IQ
+	// (default: BITSTREAM)
 	Framing string
+	// Format specifices the format of the data
+	// Valid values are: LengthPrefix
+	// (default: LengthPrefix)
+	Format string
 	// Satellite should match the satellite ID provided
 	// by the StellarStation platform. (optional)
 	Satellite string
@@ -61,6 +65,10 @@ type SchedulerConfig struct {
 	// Address is the TCP address and port number to listen to.
 	// (required)
 	Address string
+	// Format specifices the format of the data
+	// Valid values are: Tab
+	// (default: Tab)
+	Format string
 	// Satellite should match the satellite ID provided
 	// by the StellarStation platform. (optional)
 	Satellite string
@@ -83,15 +91,15 @@ type GroundStationConfig struct {
 	// Key should be the filename of the API key to use.
 	Key string
 	// PlanUpdateInterval is the time between plan update checks.
-	PlanUpdateInterval time.Duration
+	PlanUpdateInterval time.Duration `yaml:"plan-update-inteval"`
 }
 
 // Config contains all of the configuration for the application.
 type Config struct {
 	// GroundStation contains the groundstation configuration.
-	GroundStation GroundStationConfig
+	GroundStation GroundStationConfig `yaml:"station"`
 	// Data contains the data server configurations
-	Data []DataServerConfig
+	Data []DataServerConfig `yaml:"ports"`
 	// Schedulers contains the schedular configurations
 	Schedulers []SchedulerConfig
 }
@@ -122,6 +130,8 @@ func LoadConfig(configFile string) (config *Config, err error) {
 	if config.GroundStation.PlanUpdateInterval == 0 {
 		config.GroundStation.PlanUpdateInterval = DefaultPlanUpdateInterval
 	}
+
+	log.Printf("Configuration Loaded: %+v\n", config)
 
 	return config, err
 }

@@ -54,7 +54,6 @@ func NewClient() *Client {
 func (c *Client) Connect(groundstation GroundStationConfig) {
 	startFunction := func(ctx context.Context) {
 		log.Printf("Connecting to ground station %v (%v).\n", groundstation.Name, groundstation.ID)
-		log.Printf("Ground station configuration: %+v\n", groundstation)
 
 		c.groundstation = groundstation
 

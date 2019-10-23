@@ -88,13 +88,14 @@ func NewDataServer(gsConfig GroundStationConfig,
 func (s *DataServer) listen() {
 	addr, err := net.ResolveTCPAddr("tcp", s.config.Address)
 	if err != nil {
-		log.Fatalf("Couldn't parse TCP address: %v, error: %v\n",
-			s.config.Address, err)
+		log.Fatalf("!!!!! (%v) Couldn't parse TCP address: %v, error: %v\n",
+			s.config.Name, s.config.Address, err)
 	}
 
 	listener, err := net.ListenTCP("tcp", addr)
+
 	if err != nil {
-		log.Fatalf("Couldn't start TCP listener: %v\n", err)
+		log.Fatalf("!!!!! (%v) Couldn't start TCP listener: %v\n", s.config.Name, err)
 	}
 	defer listener.Close()
 
@@ -105,7 +106,14 @@ func (s *DataServer) listen() {
 		default:
 			listener.SetDeadline(time.Now().Add(time.Millisecond * 100))
 			conn, err := listener.AcceptTCP()
+			if nerr, ok := err.(net.Error); ok && nerr.Timeout() {
+				continue
+			}
 			if err != nil {
+				log.Fatalf("!!!!! (%v) Error listening for connection. Local Address: %v, Error: %v\n",
+					s.config.Name, s.config.Address, err)
+			}
+			if conn != nil {
 				go s.serve(conn)
 			}
 		}
@@ -113,11 +121,11 @@ func (s *DataServer) listen() {
 
 }
 
-func logNetworkError(err error, conn *net.TCPConn) bool {
+func logNetworkError(name string, err error, conn *net.TCPConn) bool {
 	if err != nil {
 		if err != io.EOF {
-			log.Printf("!!!!! Connection error.  Address: %v, Error: %v\n",
-				conn.RemoteAddr(), err)
+			log.Printf("!!!!! (%v) Connection error.  Address: %v, Error: %v\n",
+				name, conn.RemoteAddr(), err)
 		}
 		return true
 	}
@@ -125,9 +133,11 @@ func logNetworkError(err error, conn *net.TCPConn) bool {
 }
 
 func (s *DataServer) serve(conn *net.TCPConn) {
-	log.Printf(".:.:. Connection Opened.  Address:%v\n", conn.RemoteAddr())
+	log.Printf(".:.:. (%v) Connection Opened.  Address:%v\n",
+		s.config.Name, conn.RemoteAddr())
 	defer func() {
-		log.Printf(":.:.: Connection Closed.  Address:%v\n", conn.RemoteAddr())
+		log.Printf(":.:.: (%v) Connection Closed.  Address:%v\n",
+			s.config.Name, conn.RemoteAddr())
 	}()
 
 	ctx, cancel := context.WithCancel(s.ctx)
@@ -144,12 +154,12 @@ func (s *DataServer) serve(conn *net.TCPConn) {
 				l = uint32(len(data))
 
 				err := binary.Write(conn, ByteOrder, l)
-				if logNetworkError(err, conn) {
+				if logNetworkError(s.config.Name, err, conn) {
 					return
 				}
 
 				err = binary.Write(conn, ByteOrder, data)
-				if logNetworkError(err, conn) {
+				if logNetworkError(s.config.Name, err, conn) {
 					return
 				}
 			}
@@ -161,13 +171,13 @@ func (s *DataServer) serve(conn *net.TCPConn) {
 	for {
 		var l uint32
 		err := binary.Read(in, ByteOrder, &l)
-		if logNetworkError(err, conn) {
+		if logNetworkError(s.config.Name, err, conn) {
 			return
 		}
 
 		data := make([]byte, l)
 		err = binary.Read(in, ByteOrder, data)
-		if logNetworkError(err, conn) {
+		if logNetworkError(s.config.Name, err, conn) {
 			return
 		}
 
@@ -211,7 +221,7 @@ func (s *DataServer) PlanStart(plan *api.Plan) {
 
 	stream, err := s.client.OpenGroundStationStream(ctx)
 	if err != nil {
-		log.Printf("!!!!! Couldn't open streas. Plan ID: %v, Error: %v\n", plan.PlanId, err)
+		log.Printf("!!!!! Couldn't open stream. Plan ID: %v, Error: %v\n", plan.PlanId, err)
 		return
 	}
 
