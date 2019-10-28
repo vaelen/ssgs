@@ -70,6 +70,13 @@ func main() {
 
 	defer planWatcher.Stop()
 
+	scheduleServers := make([]*ssgs.ScheduleServer, len(config.Schedulers))
+
+	for i, c := range config.Schedulers {
+		scheduleServers[i] = ssgs.NewScheduleServer(config.GroundStation, c, client)
+		defer scheduleServers[i].Stop()
+	}
+
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 
@@ -77,6 +84,9 @@ func main() {
 		<-sigs
 		planWatcher.Stop()
 		for _, s := range dataServers {
+			s.Stop()
+		}
+		for _, s := range scheduleServers {
 			s.Stop()
 		}
 		client.Stop()

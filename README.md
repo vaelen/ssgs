@@ -63,7 +63,7 @@ Notes on the port configuration:
 
 Notes on the schedulers configuration:
 - Each entry represents a scheduling port.
-- New plans will be send to connected clients.
-- NOTE: This feature is not yet implemented.
+- Each scheduling port implements a REST API.
+- The next 24 hours worth of passes will be returned when `GET /` is called.
 - The `name` value is used for logging purposes only.
 - The `address` field tells the server which address and port to listen to.

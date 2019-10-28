@@ -8,6 +8,8 @@ github.com/golang/protobuf v1.2.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5y
 github.com/golang/protobuf v1.3.1 h1:YF8+flBXS5eO826T4nzqPrxfhQThhXl0YzfuUPu4SBg=
 github.com/golang/protobuf v1.3.1/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/golang/protobuf v1.3.2 h1:6nsPYzhq5kReh6QImI3k5qWzO4PEbvbIW2cwSfR/6xs=
+github.com/gorilla/mux v1.7.3 h1:gnP5JzjVOuiZD07fKKToCAOjS0yOpj/qPETTXCCS6hw=
+github.com/gorilla/mux v1.7.3/go.mod h1:1lud6UwP+6orDFRuTfBEV8e9/aOM/c4fVVCaMa2zaAs=
 github.com/infostellarinc/go-stellarstation v0.4.2 h1:2IwNuMaQHb2AUueHlaNt2E88n7EPIZYqJxaMQYEqffg=
 github.com/infostellarinc/go-stellarstation v0.4.2/go.mod h1:ZUgU88DoZXjmZ2XrIyYfEWlnCV3sYWMkcsRUMvcwNUg=
 github.com/square/goprotowrap v0.0.0-20190116012208-bb93590db2db/go.mod h1:ss+tcSDAsyytwf1fIIsDTBbLS5uMvktdl8DvEZwELx4=

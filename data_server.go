@@ -31,9 +31,9 @@ import (
 	api "github.com/infostellarinc/go-stellarstation/api/v1/groundstation"
 )
 
-/*********
+/**************
  * DataServer *
- *********/
+ **************/
 
 var ByteOrder = binary.LittleEndian
 
